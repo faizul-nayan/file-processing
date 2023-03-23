@@ -26,6 +26,7 @@ import javax.persistence.criteria.Root;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class FileProcessServiceImpl implements FileProcessService {
@@ -53,7 +54,7 @@ public class FileProcessServiceImpl implements FileProcessService {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         List<Customer> customerList = new ArrayList<>();
         List<InvalidCustomer> invalidCustomerList = new ArrayList<>();
-        Map<String , String> contactMap = new HashMap<>();
+        Set<String> contactSet = ConcurrentHashMap.newKeySet();
 
         bufferedReader.lines().parallel().forEachOrdered(line->{
             String[] values = line.split(",");
@@ -71,17 +72,12 @@ public class FileProcessServiceImpl implements FileProcessService {
                             .street(values[3].trim()).streetCode(values[4].trim()).phoneNumber(phoneNumber).email(emailAddress)
                             .ipAddress(values[7].trim()).build();
                     //checking duplicate
-                    if(!contactMap.containsKey(phoneNumber)){
-                        contactMap.put(phoneNumber, emailAddress);
+                    if(contactSet.add(phoneNumber + emailAddress)){
                         customerList.add(customer);
                     }else {
-                        String exEmail = contactMap.get(phoneNumber);
-                        if(exEmail.equalsIgnoreCase(emailAddress)){
-                            throw new DuplicateDataFoundException();
-                        }else {
-                            customerList.add(customer);
-                        }
+                        throw new DuplicateDataFoundException();
                     }
+
                 } catch (ArrayIndexOutOfBoundsException e) {
                     invalidCustomerList.add(InvalidCustomer.builder().input(line).build());
                 }catch (InvalidContactException exception){
