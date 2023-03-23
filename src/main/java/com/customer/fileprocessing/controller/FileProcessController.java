@@ -19,27 +19,9 @@ import java.util.Set;
 @Slf4j
 public class FileProcessController {
 
-    @GetMapping
-    public String processFile(){
-        Set<TestObject> testObjectSet = new HashSet<>();
-        List<TestObject> testObjectList = new ArrayList<>();
-        TestObject object = new TestObject("Faizul", "Nayan");
-        testObjectSet.add(object);
-        testObjectSet.add(object);
-        testObjectSet.add(object);
-
-        testObjectList.add(object);
-        testObjectList.add(object);
-        testObjectList.add(object);
-
-        String test = " set size : "+ testObjectSet.size() +" and list size "+ testObjectList.size();
-        return "hello   --->> "+test;
-    }
-
     @GetMapping("/export")
     private String exportFile(){
-        fileProcessService.exportToFile();
-        return "sss";
+        return fileProcessService.exportToFile();
     }
 
     @RequestMapping(value = "/uploads", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

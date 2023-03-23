@@ -27,7 +27,8 @@ public class FileGenerator<T> {
         this.classType = classType;
     }
 
-    public void exportCustomersToFile(int batchSize) {
+    public String exportCustomersToFile(int batchSize) {
+        StringBuilder stringBuilder = new StringBuilder();
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
         int totalRecords = getTotalRecords();
         int totalPages = (int) Math.ceil((double) totalRecords / batchSize);
@@ -39,7 +40,8 @@ public class FileGenerator<T> {
             executorService.submit(() -> {
                 List<T> customers = getCustomers(pageRequest);
                 if (!customers.isEmpty()) {
-                    writeCustomersToFile(customers, pageNumber);
+                    stringBuilder.append(writeCustomersToFile(customers, pageNumber));
+                    stringBuilder.append("\n");
                 }
                 return null;
             });
@@ -53,6 +55,7 @@ public class FileGenerator<T> {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+        return stringBuilder.toString();
     }
 
     private int getTotalRecords() {
@@ -73,7 +76,7 @@ public class FileGenerator<T> {
         return query.getResultList();
     }
 
-    private void writeCustomersToFile(List<T> customers, int pageNo) {
+    private String writeCustomersToFile(List<T> customers, int pageNo) {
 
         String className = classType.getSimpleName();
 
@@ -83,5 +86,6 @@ public class FileGenerator<T> {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
+        return fileName;
     }
 }

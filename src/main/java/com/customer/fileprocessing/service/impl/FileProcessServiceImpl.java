@@ -44,7 +44,7 @@ public class FileProcessServiceImpl implements FileProcessService {
     }
 
     @Override
-    public void processFile(MultipartFile file){
+    public String processFile(MultipartFile file){
         InputStream inputStream = null;
         try {
             inputStream = file.getInputStream();
@@ -95,17 +95,23 @@ public class FileProcessServiceImpl implements FileProcessService {
         System.out.println(invalidCustomerList.size());
         System.out.println(customerList.size());
         System.out.println(customerList.size() + invalidCustomerList.size());
+
+        String returnMessage = String.format("Write %d row for valid customer and %d row for invalid customer and total %d row inserted", customerList.size(), invalidCustomerList.size(), customerList.size() + invalidCustomerList.size());
+
+        return returnMessage;
     }
 
     @Override
-    public void exportToFile() {
+    public String exportToFile() {
 
 
         FileGenerator<InvalidCustomer> invalidCustomerFileGenerator = new FileGenerator<>(entityManager, InvalidCustomer.class);
-        invalidCustomerFileGenerator.exportCustomersToFile(100000);
+        String invalidCustomerFileName = invalidCustomerFileGenerator.exportCustomersToFile(100000);
 
         FileGenerator<Customer> validCustomerFileGenerator = new FileGenerator<>(entityManager, Customer.class);
-        validCustomerFileGenerator.exportCustomersToFile(100000);
+        String validCustomerFileName = validCustomerFileGenerator.exportCustomersToFile(100000);
+
+        return "valid customer location are: \n"+validCustomerFileName + " \n"+"invalid customer location are: \n"+invalidCustomerFileName;
     }
 
 
