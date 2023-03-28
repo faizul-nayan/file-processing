@@ -24,7 +24,6 @@ public class FileProcessController {
 
     @RequestMapping(value = "/uploads", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String submitMulti(@RequestParam(value = "file", required = true) MultipartFile mfile){
-        fileProcessService.processFile(mfile);
-       return mfile.getOriginalFilename();
+        return fileProcessService.processFile(mfile);
     }
 }
