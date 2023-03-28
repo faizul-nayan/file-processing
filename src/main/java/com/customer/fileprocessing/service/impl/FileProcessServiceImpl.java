@@ -78,13 +78,9 @@ public class FileProcessServiceImpl implements FileProcessService {
                         throw new DuplicateDataFoundException();
                     }
 
-                } catch (ArrayIndexOutOfBoundsException e) {
+                } catch (ArrayIndexOutOfBoundsException | InvalidContactException | DuplicateDataFoundException e) {
                     invalidCustomerList.add(InvalidCustomer.builder().input(line).build());
-                }catch (InvalidContactException exception){
-                    invalidCustomerList.add(InvalidCustomer.builder().input(line).build());
-                }catch (DuplicateDataFoundException exception){
-                    invalidCustomerList.add(InvalidCustomer.builder().input(line).build());
-                }catch (Exception exception){
+                } catch (Exception exception){
                     invalidCustomerList.add(InvalidCustomer.builder().input(line).build());
                 }
             }
@@ -106,7 +102,7 @@ public class FileProcessServiceImpl implements FileProcessService {
 
 
         FileGenerator<InvalidCustomer> invalidCustomerFileGenerator = new FileGenerator<>(entityManager, InvalidCustomer.class);
-        String invalidCustomerFileName = invalidCustomerFileGenerator.exportCustomersToFile(100000);
+        String invalidCustomerFileName = invalidCustomerFileGenerator.exportCustomersToFile(-1);
 
         FileGenerator<Customer> validCustomerFileGenerator = new FileGenerator<>(entityManager, Customer.class);
         String validCustomerFileName = validCustomerFileGenerator.exportCustomersToFile(100000);

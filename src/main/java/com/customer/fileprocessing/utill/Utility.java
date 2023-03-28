@@ -4,7 +4,8 @@ import java.util.regex.Pattern;
 
 public class Utility {
     public static final Pattern PHONE_PATTERN = Pattern.compile("^(1[ -]?)?\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$");
-    public static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
+  //  public static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
+    public static final Pattern EMAIL_PATTERN = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
     public static final String ROOT_FILE_PATH = "src/main/resources/export/";
 
     public static boolean validatePhoneNumber(String phoneNumber) {

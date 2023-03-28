@@ -31,6 +31,9 @@ public class FileGenerator<T> {
         StringBuilder stringBuilder = new StringBuilder();
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
         int totalRecords = getTotalRecords();
+        if(-1 == batchSize){
+            batchSize = totalRecords;
+        }
         int totalPages = (int) Math.ceil((double) totalRecords / batchSize);
         int recordsProcessed = 0;
 
