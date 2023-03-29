@@ -11,18 +11,10 @@ import com.customer.fileprocessing.utill.CustomerBatchProcess;
 import com.customer.fileprocessing.utill.FileGenerator;
 import com.customer.fileprocessing.utill.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -92,9 +84,7 @@ public class FileProcessServiceImpl implements FileProcessService {
         System.out.println(customerList.size());
         System.out.println(customerList.size() + invalidCustomerList.size());
 
-        String returnMessage = String.format("Write %d row for valid customer and %d row for invalid customer and total %d row inserted", customerList.size(), invalidCustomerList.size(), customerList.size() + invalidCustomerList.size());
-
-        return returnMessage;
+        return String.format("Write %d row for valid customer and %d row for invalid customer and total %d row inserted", customerList.size(), invalidCustomerList.size(), customerList.size() + invalidCustomerList.size());
     }
 
     @Override
